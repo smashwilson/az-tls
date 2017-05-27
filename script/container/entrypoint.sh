@@ -26,12 +26,18 @@ if [ "${FORCE:-}" != "yes" ]; then
   exit 1
 fi
 
+if [ "${LE_PRODUCTION:-}" = "yes" ]; then
+  SERVER_ARG=
+else
+  SERVER_ARG="--test-cert"
+fi
+
 printf "Issuing new certificate\n"
 certbot certonly --manual --preferred-challenges=dns \
   --manual-auth-hook /app/certbot/auth.py \
   --manual-cleanup-hook /app/certbot/cleanup.py \
   -n --agree-tos --manual-public-ip-logging-ok --email "${EMAIL}" \
-  --test-cert \
+  "${SERVER_ARG}" \
   --domain pushbot.party \
   --domain api.pushbot.party
 
