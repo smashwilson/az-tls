@@ -1,2 +1,3 @@
 # azurefire-tls
-Renew TLS certifications from Let's Encrypt via DNS verification
+
+A container that renews TLS certifications from Let's Encrypt via DNS verification when certificate expiration is near.
