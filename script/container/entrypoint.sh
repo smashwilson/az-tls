@@ -41,6 +41,9 @@ certbot certonly --manual --preferred-challenges=dns \
   --domain pushbot.party \
   --domain api.pushbot.party
 
+printf "Generating new Diffie-Helman parameters\n"
+openssl dhparam -out /etc/letsencrypt/live/dhparams.pem 2048
+
 printf "Creating certificate tarball\n"
 cd /etc/letsencrypt/live/
 tar zcvf /out/tls-certificates.tar.gz pushbot.party/*.pem
