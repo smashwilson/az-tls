@@ -46,7 +46,7 @@ openssl dhparam -out /etc/letsencrypt/live/dhparams.pem 2048
 
 printf "Creating certificate tarball\n"
 cd /etc/letsencrypt/live/
-tar zcvf /out/tls-certificates.tar.gz pushbot.party/*.pem
+tar zcvhf /out/tls-certificates.tar.gz dhparams.pem pushbot.party/*.pem
 cd /app
 
 printf "Encrypting tarball and uploading to S3\n"
