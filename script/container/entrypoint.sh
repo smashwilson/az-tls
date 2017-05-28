@@ -36,8 +36,7 @@ printf "Issuing new certificate\n"
 certbot certonly --manual --preferred-challenges=dns \
   --manual-auth-hook /app/certbot/auth.py \
   --manual-cleanup-hook /app/certbot/cleanup.py \
-  -n --agree-tos --manual-public-ip-logging-ok --email "${EMAIL}" \
-  "${SERVER_ARG}" \
+  -n --agree-tos --email "${EMAIL}" --manual-public-ip-logging-ok ${SERVER_ARG} \
   --domain pushbot.party \
   --domain api.pushbot.party
 
