@@ -3,10 +3,16 @@ sudo: required
 language: bash
 services:
 - docker
-script: script/ci/build
+notifications:
+  email: false
+before_install:
+- curl -s https://raw.githubusercontent.com/smashwilson/azurefire-infra/master/service/ci.sh -o script/infra.sh
+- chmod +x script/infra.sh
+script: script/infra.sh build
+after_success: script/infra.sh after_success
 deploy:
   provider: script
   skip_cleanup: true
-  script: script/ci/deploy
+  script: script/infra.sh deploy
   on:
-    branch: master
+    all_branches: true

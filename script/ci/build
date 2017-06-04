@@ -1,9 +1,0 @@
-#!/bin/bash
-
-set -euo pipefail
-source script/ci/common.sh
-
-docker build \
-  -t "${IMAGE_TAG}" \
-  --label party.pushbot.commit=$(git rev-parse HEAD) \
-  .
