@@ -49,3 +49,24 @@ cd /app
 
 printf "Encrypting tarball and uploading to S3\n"
 python /app/certbot/upload.py
+
+printf "Triggering an infrastructure build on Travis\n"
+BODY='{
+  "request": {
+    "branch": "master",
+    "config": {
+      "merge_mode": "deep_merge",
+      "env": {
+        "BUILD_CAUSE": "automatic TLS certificate renewal"
+      }
+    }
+  }
+}'
+
+curl -s -X POST \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -H "Travis-API-Version: 3" \
+  -H "Authorization: token ${TRAVIS_TOKEN}" \
+  -d "${BODY}" \
+  https://api.travis-ci.org/repo/smashwilson%2Fazurefire-infra/requests
