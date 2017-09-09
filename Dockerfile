@@ -1,7 +1,7 @@
 FROM certbot/certbot:v0.14.2
 LABEL maintainer "Ash Wilson"
 
-RUN apk add --no-cache python3 openssl
+RUN apk add --no-cache python3 openssl curl
 ADD requirements.txt /app/requirements.txt
 RUN pip install -r /app/requirements.txt
 ADD certbot /app/certbot/
