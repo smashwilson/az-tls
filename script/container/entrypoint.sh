@@ -23,7 +23,6 @@ if [ "${FORCE:-}" != "yes" ]; then
   fi
 
   printf "Certificate expiration date %s is less than 7 days from now.\n" "${EXPIRATION_DATE}"
-  exit 1
 fi
 
 if [ "${LE_PRODUCTION:-}" = "yes" ]; then
