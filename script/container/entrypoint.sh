@@ -56,9 +56,9 @@ BODY='{
     "branch": "master",
     "config": {
       "merge_mode": "deep_merge",
-      "env": {
-        "BUILD_CAUSE": "automatic TLS certificate renewal"
-      }
+      "env": [
+        "BUILD_CAUSE=automatic TLS certificate renewal"
+      ]
     }
   }
 }'
