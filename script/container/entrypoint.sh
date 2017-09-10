@@ -57,7 +57,7 @@ BODY='{
     "config": {
       "merge_mode": "deep_merge",
       "env": [
-        "BUILD_CAUSE=automatic TLS certificate renewal"
+        "BUILD_CAUSE=\"automatic TLS certificate renewal\""
       ]
     }
   }
