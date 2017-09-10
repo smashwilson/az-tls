@@ -11,14 +11,13 @@ with open('.certbot.{}.json'.format(domain)) as inf:
 
 zone_id = payload['zone_id']
 value = payload['value']
-job_number = os.environ.get('TRAVIS_JOB_NUMBER')
 
 client = boto3.client('route53')
 
 client.change_resource_record_sets(
     HostedZoneId=zone_id,
     ChangeBatch={
-        'Comment': "Let's Encrypt auth cleanup from Travis job {}".format(job_number),
+        'Comment': "Let's Encrypt auth cleanup",
         'Changes': [
             {
                 'Action': 'DELETE',
