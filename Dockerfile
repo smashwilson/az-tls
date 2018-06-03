@@ -1,4 +1,4 @@
-FROM certbot/certbot:v0.14.2
+FROM certbot/certbot:v0.24.0
 LABEL maintainer "Ash Wilson"
 
 RUN apk add --no-cache python3 openssl curl
