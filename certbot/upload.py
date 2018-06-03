@@ -4,7 +4,7 @@ import io
 import struct
 import os
 import boto3
-from Crypto.Hash import AES
+from Crypto.Cipher import AES
 from Crypto import Random
 
 VERSION = 0
