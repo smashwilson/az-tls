@@ -1,43 +1,38 @@
 #!/usr/bin/env python
 
-import io
-import struct
-import os
-import boto3
-from Crypto.Cipher import AES
-from Crypto import Random
+import json
+import urllib.request
 
-VERSION = 0
+password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+password_manager.add_password(None, os.environ['AZ_COORDINATOR_ADDR'], 'az-tls', os.environ['AZ_COORDINATOR_TOKEN'])
+auth_handler = urllib.request.HTTPBasicAuthHandler(password_manager)
+opener = urllib.request.build_opener(auth_handler)
 
+tls_locations = {
+    'TLS_DH_PARAMS': '/etc/letsencrypt/live/dhparams',
+    'TLS_CERTIFICATE': '/etc/letsencrypt/live/backend.azurefire.net/fullchain.pem',
+    'TLS_KEY': '/etc/letsencrypt/live/backend.azurefire.net/privkey.pem'
+}
 
-def pad(s):
-    return s + (AES.block_size - len(s) % AES.block_size) * b'\x00'
+tls_secrets_payload = {}
+for varname, filepath in tls_locations.items():
+    with open(filepath, encoding='utf8') as f:
+        tls_secrets_payload[varname] = f.read()
 
-
-key_id = os.environ['KMS_KEY_ID']
-bucket_name = os.environ['S3_BUCKET_NAME']
-
-s3 = boto3.resource('s3')
-kms = boto3.client('kms')
-
-with open('/out/tls-certificates.tar.gz', 'rb') as inf:
-    tarball = inf.read()
-
-data_key = kms.generate_data_key(KeyId=key_id, KeySpec='AES_128')
-data_key_enc = data_key.get('CiphertextBlob')
-
-iv = Random.new().read(AES.block_size)
-aes = AES.new(data_key.get('Plaintext'), AES.MODE_CBC, iv)
-
-ciphertext = io.BytesIO()
-ciphertext.write(struct.pack('>LL', VERSION, len(data_key_enc)))
-ciphertext.write(data_key_enc)
-ciphertext.write(iv)
-ciphertext.write(aes.encrypt(pad(tarball)))
-
-s3.Bucket(bucket_name).put_object(
-    Key='tls-certificates.tar.enc',
-    Body=ciphertext.getvalue()
+print('Uploading TLS certificate secrets to the coordinator')
+secrets_req = urllib.request.Request(
+    method='POST',
+    url='{}/secrets'.format(os.environ['AZ_COORDINATOR_ADDR']),
+    headers={'Content-Type': 'application/json'},
+    data=json.dumps(tls_secrets_payload)
 )
+opener.open(secrets_req)
 
-print('Encrypted certificate bundle uploaded to S3.')
+print('Triggering a coordinator sync')
+sync_req = urllib.request.Request(
+    method='POST',
+    url='{}/sync'.format(os.environ(['AZ_COORDINATOR_ADDR']))
+)
+opener.open(sync_req)
+
+print('Upload complete.')
