@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -euo pipefail
 
@@ -36,37 +36,12 @@ certbot certonly --manual --preferred-challenges=dns \
   --manual-auth-hook /app/certbot/auth.py \
   --manual-cleanup-hook /app/certbot/cleanup.py \
   -n --agree-tos --email "${EMAIL}" --manual-public-ip-logging-ok ${SERVER_ARG} \
-  --domain pushbot.party \
+  --domain backend.azurefire.net \
+  --domain coordinator.azurefire.net \
   --domain api.pushbot.party
 
 printf "Generating new Diffie-Helman parameters\n"
 openssl dhparam -out /etc/letsencrypt/live/dhparams.pem 2048
 
-printf "Creating certificate tarball\n"
-cd /etc/letsencrypt/live/
-tar zcvhf /out/tls-certificates.tar.gz dhparams.pem pushbot.party/*.pem
-cd /app
-
-printf "Encrypting tarball and uploading to S3\n"
+printf "Uploading new secrets to the coordinator\n"
 python /app/certbot/upload.py
-
-printf "Triggering an infrastructure build on Travis\n"
-BODY='{
-  "request": {
-    "branch": "master",
-    "config": {
-      "merge_mode": "deep_merge",
-      "env": [
-        "BUILD_CAUSE=\"automatic TLS certificate renewal\""
-      ]
-    }
-  }
-}'
-
-curl -s -X POST \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  -H "Travis-API-Version: 3" \
-  -H "Authorization: token ${TRAVIS_TOKEN}" \
-  -d "${BODY}" \
-  https://api.travis-ci.org/repo/smashwilson%2Fazurefire-infra/requests
