@@ -24,7 +24,7 @@ secrets_req = urllib.request.Request(
     method='POST',
     url='{}/secrets'.format(os.environ['AZ_COORDINATOR_ADDR']),
     headers={'Content-Type': 'application/json'},
-    data=json.dumps(tls_secrets_payload)
+    data=json.dumps(tls_secrets_payload).encode('utf-8')
 )
 opener.open(secrets_req)
 
