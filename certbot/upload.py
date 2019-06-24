@@ -10,7 +10,7 @@ auth_handler = urllib.request.HTTPBasicAuthHandler(password_manager)
 opener = urllib.request.build_opener(auth_handler)
 
 tls_locations = {
-    'TLS_DH_PARAMS': '/etc/letsencrypt/live/dhparams',
+    'TLS_DH_PARAMS': '/etc/letsencrypt/live/dhparams.pem',
     'TLS_CERTIFICATE': '/etc/letsencrypt/live/backend.azurefire.net/fullchain.pem',
     'TLS_KEY': '/etc/letsencrypt/live/backend.azurefire.net/privkey.pem'
 }
