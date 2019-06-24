@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -euo
+set -eu
 
 MISSING=no
 if [ -z "${EMAIL:-}" ]; then
