@@ -6,7 +6,7 @@ if [ "${FORCE:-}" != "yes" ]; then
   printf "Checking current certificate's expiration date\n"
   EXPIRATION_DATE=$(
     echo |
-    openssl s_client -connect pushbot.party:443 2>/dev/null |
+    openssl s_client -connect backend.azurefire.net:443 2>/dev/null |
     openssl x509 -noout -dates |
     grep notAfter
   )
