@@ -44,4 +44,4 @@ printf "Generating new Diffie-Helman parameters\n"
 openssl dhparam -out /etc/letsencrypt/live/dhparams.pem 2048
 
 printf "Uploading new secrets to the coordinator\n"
-python /app/certbot/upload.py
+python3 /app/certbot/upload.py
