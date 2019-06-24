@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import json
-import urllib.request
+import urllib.requests
 
 password_manager = urllib.request.HTTPPasswordMgrWithDefaultRealm()
 password_manager.add_password(None, os.environ['AZ_COORDINATOR_ADDR'], 'az-tls', os.environ['AZ_COORDINATOR_TOKEN'])
@@ -20,7 +20,7 @@ for varname, filepath in tls_locations.items():
         tls_secrets_payload[varname] = f.read()
 
 print('Uploading TLS certificate secrets to the coordinator')
-secrets_req = urllib.request.Request(
+secrets_req = urllib.requests.Request(
     method='POST',
     url='{}/secrets'.format(os.environ['AZ_COORDINATOR_ADDR']),
     headers={'Content-Type': 'application/json'},
@@ -29,7 +29,7 @@ secrets_req = urllib.request.Request(
 opener.open(secrets_req)
 
 print('Triggering a coordinator sync')
-sync_req = urllib.request.Request(
+sync_req = urllib.requests.Request(
     method='POST',
     url='{}/sync'.format(os.environ(['AZ_COORDINATOR_ADDR']))
 )
