@@ -9,6 +9,7 @@ action "Build" {
 }
 
 action "Synchronize" {
+  needs = "Build"
   uses = "smashwilson/az-infra/actions/azsync@master"
   secrets = ["AZ_COORDINATOR_TOKEN"]
 }
