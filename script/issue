@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -eu
+
+MISSING=no
+if [ -z "${EMAIL:-}" ]; then
+  printf "Must set EMAIL to your email address.\n" >&2
+  MISSING=yes
+fi
+if [ -z "${AZ_COORDINATOR_TOKEN:-}" ]; then
+  printf "Must set AZ_COORDINATOR_TOKEN to a valid coordinator token.\n" >&2
+  MISSING=yes
+fi
+if [ -z "${AWS_ACCESS_KEY_ID:-}" ] || [ -z "${AWS_SECRET_ACCESS_KEY:-}" ]; then
+  printf "Must set both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.\n" >&2
+  MISSING=yes
+fi
+if [ "${MISSING}" = "yes" ]; then
+  exit 1
+fi
+
+docker build -t quay.io/smashwilson/az-tls:local .
+exec docker run \
+  --rm \
+  --env EMAIL="${EMAIL}" \
+  --env AWS_ACCESS_KEY_ID \
+  --env AWS_SECRET_ACCESS_KEY \
+  --env AWS_DEFAULT_REGION="us-east-1" \
+  --env AZ_COORDINATOR_ADDR="https://coordinator.azurefire.net:8443" \
+  --env AZ_COORDINATOR_TOKEN \
+  --env FORCE=yes \
+  --env LE_PRODUCTION \
+  -v $(pwd)/out:/etc/letsencrypt/ \
+  quay.io/smashwilson/az-tls:local
