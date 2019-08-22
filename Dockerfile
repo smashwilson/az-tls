@@ -1,4 +1,4 @@
-FROM certbot/certbot:v0.37.1
+FROM certbot/certbot:v0.37.2
 LABEL maintainer "Ash Wilson"
 
 RUN apk add --no-cache python3 openssl curl gcc g++ make libffi-dev openssl-dev python3-dev bash
