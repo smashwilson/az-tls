@@ -8,9 +8,10 @@ import ssl
 from pathlib import Path
 
 ssl_context = ssl.create_default_context()
-ssl_context.load_verify_locations(
-    cafile=Path(__file__).parent.resolve().joinpath('fakelerootx1.pem'),
-)
+if os.environ.get('TRUST_LE_STAGING') == 'yes':
+    ssl_context.load_verify_locations(
+        cafile=Path(__file__).parent.resolve().joinpath('fakelerootx1.pem'),
+    )
 
 # debuglevel=10
 log_handler = urllib.request.HTTPSHandler(context=ssl_context)
