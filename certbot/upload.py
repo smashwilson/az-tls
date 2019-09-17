@@ -4,8 +4,16 @@ import os
 import json
 import urllib.request
 import base64
+import ssl
+from pathlib import Path
 
-log_handler = urllib.request.HTTPSHandler()
+ssl_context = ssl.create_default_context()
+ssl_context.load_verify_locations(
+    cafile=Path(__file__).parent.resolve().joinpath('fakelerootx1.pem'),
+)
+
+# debuglevel=10
+log_handler = urllib.request.HTTPSHandler(context=ssl_context)
 opener = urllib.request.build_opener(log_handler)
 
 def generate_auth_header():
