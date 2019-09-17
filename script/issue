@@ -35,5 +35,6 @@ exec docker run \
   --env AZ_COORDINATOR_TOKEN \
   --env FORCE=yes \
   --env LE_PRODUCTION \
+  --env TRUST_LE_STAGING \
   -v $(pwd)/out:/etc/letsencrypt/ \
   quay.io/smashwilson/az-tls:local
