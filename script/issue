@@ -15,6 +15,10 @@ if [ -z "${AWS_ACCESS_KEY_ID:-}" ] || [ -z "${AWS_SECRET_ACCESS_KEY:-}" ]; then
   printf "Must set both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.\n" >&2
   MISSING=yes
 fi
+if [ -z "${KMS_KEY_ID:-}" ]; then
+  printf "Must set KMS_KEY_ID.\n" >&2
+  MISSING=yes
+fi
 if [ "${MISSING}" = "yes" ]; then
   exit 1
 fi
@@ -25,6 +29,7 @@ exec docker run \
   --env EMAIL="${EMAIL}" \
   --env AWS_ACCESS_KEY_ID \
   --env AWS_SECRET_ACCESS_KEY \
+  --env KMS_KEY_ID \
   --env AWS_DEFAULT_REGION="us-east-1" \
   --env AZ_COORDINATOR_ADDR="https://coordinator.azurefire.net:8443" \
   --env AZ_COORDINATOR_TOKEN \
