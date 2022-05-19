@@ -10,7 +10,6 @@ jobs:
       uses: smashwilson/az-infra/actions/azbuild@master
       env:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REGISTRY_URL }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
     - name: Synchronize
       uses: smashwilson/az-infra/actions/azsync@master
