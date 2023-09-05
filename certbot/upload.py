@@ -56,5 +56,5 @@ if os.environ.get('AZ_COORDINATOR_TOKEN') and os.environ['AZ_COORDINATOR_ADDR']:
 else:
     outfile = '/etc/letsencrypt/secrets.json'
     with open(outfile, mode='w', encoding='utf8') as outf:
-        outf.write(json.dumps(tls_secrets_payload).encode('utf-8'))
+        outf.write(json.dumps(tls_secrets_payload))
     print('Secrets written to file {}.'.format(outfile))
